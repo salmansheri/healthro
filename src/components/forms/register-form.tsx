@@ -4,46 +4,33 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Button } from "../ui/button";
 import { CustomFormField, FormFieldType } from "../ui/form-field";
 import { Form, FormControl } from "../ui/form";
 import { SubmitButton } from "../ui/submit-button";
 import { PatientFormValidation } from "@/lib/types/validation";
 import { useRouter } from "next/navigation";
-import { createUser } from "@/lib/action/patients.action";
+import { createUser, registerPatient } from "@/lib/action/patients.action";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Label } from "../ui/label";
 import {
   Doctors,
   IdentificationTypes,
   PatientFormDefaultValues,
+  GenderOptions,
 } from "@/lib/data/constants";
 import { SelectItem } from "../ui/select";
 import { FileUploader } from "../ui/file-uploader";
+import { toast } from "../ui/use-toast";
 
 interface RegisterFormProps {
   user: User;
 }
 
-const GenderOptions = [
-  {
-    id: 1,
-    label: "Male",
-  },
-  {
-    id: 1,
-    label: "Female",
-  },
-  {
-    id: 1,
-    label: "Others",
-  },
-];
-
 export const RegisterForm: React.FC<RegisterFormProps> = ({ user }) => {
   const form = useForm<z.infer<typeof PatientFormValidation>>({
     resolver: zodResolver(PatientFormValidation),
     defaultValues: {
+      ...PatientFormDefaultValues,
       name: user.name,
       email: user.email,
       phone: user.phone,
@@ -55,21 +42,64 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ user }) => {
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: z.infer<typeof PatientFormValidation>) => {
+    let formData;
+
+    if (
+      values.identificationDocument &&
+      values.identificationDocument?.length > 0
+    ) {
+      const blobFile = new Blob([values.identificationDocument[0]], {
+        type: values.identificationDocument[0].type,
+      });
+
+      formData = new FormData();
+
+      formData.append("blobFile", blobFile);
+      formData.append("filename", values.identificationDocument[0].name);
+    }
     try {
-      const userData = {
-        ...PatientFormDefaultValues,
-        name: "",
-        email: "",
-        phone: "",
+      const patient = {
+        userId: user.$id,
+        name: values.name,
+        email: values.email,
+        phone: values.phone,
+        birthDate: new Date(values.birthDate),
+        gender: values.gender,
+        address: values.address,
+        occupation: values.occupation,
+        emergencyContactName: values.emergencyContactName,
+        emergencyContactNumber: values.emergencyContactNumber,
+        primaryPhysician: values.primaryPhysician,
+        insurenceProvider: values.insurenceProvider,
+        insurencePolicyNumber: values.insurencePolicyNumber,
+        allergies: values.allergies,
+        currentMedication: values.currentMedication,
+        familyMedicalHistory: values.familyMedicalHistory,
+        pastMedicalHistory: values.pastMedicalHistory,
+        identificationType: values.identificationType,
+        identificationNumber: values.identificationNumber,
+        identificationDocument: values.identificationDocument
+          ? formData
+          : undefined,
+        privacyConsent: values.privacyConsent,
+        treatmentConsent: values.treatmentConsent,
+        disclosureConsent: values.disclosureConsent,
       };
+      // @ts-ignore
+      const newPatient = await registerPatient(patient);
 
-      const user = await createUser(userData);
-
-      if (user) {
-        router.push(`/patients/${user?.$id}/register`);
-      }
+      toast({
+        title: "Success",
+        description: "Success fully Registered",
+      });
+      router.push(`/patients/${user?.$id}/new-appointment`);
     } catch (error) {
-      console.error(error);
+      toast({
+        title: "Something Went Wrong",
+        description: "Cannot Register Please Try again Later",
+        variant: "destructive",
+      });
+      console.log(error);
     }
   };
 
@@ -138,16 +168,10 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ user }) => {
                     defaultValue={field.value}
                   >
                     {GenderOptions.map((option) => (
-                      <div key={option.id} className="radio-group">
-                        <RadioGroupItem
-                          value={option.label}
-                          id={option.label}
-                        />
-                        <Label
-                          htmlFor={option.label}
-                          className="cursor-pointer"
-                        >
-                          {option.label}
+                      <div key={option} className="radio-group">
+                        <RadioGroupItem value={option} id={option} />
+                        <Label htmlFor={option} className="cursor-pointer">
+                          {option}
                         </Label>
                       </div>
                     ))}
@@ -191,7 +215,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ user }) => {
             control={form.control}
             label="Emergency Contact Number"
             placeholder="Eg: 383838383"
-            name="Emergency Contact Number"
+            name="emergencyContactNumber"
             fieldType={FormFieldType.INPUT}
           />
         </div>
@@ -275,7 +299,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ user }) => {
         <CustomFormField
           control={form.control}
           label="Identification Type"
-          placeholder="Ex: Aadhar Card"
+          placeholder="Select an identification type"
           name="identificationType"
           fieldType={FormFieldType.SELECT}
         >
@@ -329,7 +353,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ user }) => {
         <CustomFormField
           control={form.control}
           label="I Consent to Privacy Policy"
-          name="privacyConset"
+          name="privacyConsent"
           fieldType={FormFieldType.CHECKBOX}
         />
 

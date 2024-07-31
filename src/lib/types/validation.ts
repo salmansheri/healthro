@@ -17,11 +17,9 @@ export const PatientFormValidation = z.object({
     .min(2, "Name must be at least 2 characters")
     .max(50, "Name must be at most 50 characters"),
   email: z.string().email("Invalid email address"),
-  phone: z
-    .string()
-    .refine((phone) => /^\+\d{10,15}$/.test(phone), "Invalid phone number"),
-  birthDate: z.coerce.date(),
-  gender: z.enum(["Male", "Female", "Other"]),
+  phone: z.string(),
+  birthDate: z.date(),
+  gender: z.enum(["male", "female", "other"]),
   address: z
     .string()
     .min(5, "Address must be at least 5 characters")
@@ -34,18 +32,13 @@ export const PatientFormValidation = z.object({
     .string()
     .min(2, "Contact name must be at least 2 characters")
     .max(50, "Contact name must be at most 50 characters"),
-  emergencyContactNumber: z
-    .string()
-    .refine(
-      (emergencyContactNumber) => /^\+\d{10,15}$/.test(emergencyContactNumber),
-      "Invalid phone number",
-    ),
+  emergencyContactNumber: z.string(),
   primaryPhysician: z.string().min(2, "Select at least one doctor"),
-  insuranceProvider: z
+  insurenceProvider: z
     .string()
     .min(2, "Insurance name must be at least 2 characters")
     .max(50, "Insurance name must be at most 50 characters"),
-  insurancePolicyNumber: z
+  insurencePolicyNumber: z
     .string()
     .min(2, "Policy number must be at least 2 characters")
     .max(50, "Policy number must be at most 50 characters"),
