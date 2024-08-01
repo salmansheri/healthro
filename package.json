@@ -33,6 +33,7 @@
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.52.1",
     "react-phone-number-input": "^3.4.4",
+    "react-time-picker": "^7.0.0",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.23.8"
