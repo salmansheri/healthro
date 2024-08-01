@@ -4,15 +4,19 @@ import { Copyright } from "lucide-react";
 import Image from "next/image";
 
 interface IParams {
-  userId: string; 
+  userId: string;
 }
 
-export default async  function NewAppointmentPage({params}: {params: IParams}) {
-  const { userId } = params; 
+export default async function NewAppointmentPage({
+  params,
+}: {
+  params: IParams;
+}) {
+  const { userId } = params;
   const date = new Date();
   const year = date.getFullYear();
 
-  const patient = await getPatient(userId); 
+  const patient = await getPatient(userId);
   return (
     <div className="flex h-screen max-h-screen">
       {/* TODO: OTP verification*/}
@@ -20,18 +24,16 @@ export default async  function NewAppointmentPage({params}: {params: IParams}) {
         <div className="sub-container max-w-[860px] flex-1 justify-between">
           <h2 className="text-2xl font-bold">Healthro</h2>
 
-          <AppointmentForm 
+          <AppointmentForm
             type="create"
             userId={userId}
             patientId={patient.$id}
-
           />
 
           <div className="text-14-regular py-20 flex justify-between">
             <p className="justify-items-end text-dark-600 xl:text-left flex items-center justify-center">
               <Copyright className="h-3 w-3" /> {year} Healthro
             </p>
-            
           </div>
         </div>
       </section>

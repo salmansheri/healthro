@@ -80,7 +80,9 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({
           description: "Successfully Created Appointment",
         });
 
-        router.push(`/patients/${userId}/new-appointment/success?appointmentId=${appointment.$id}`)
+        router.push(
+          `/patients/${userId}/new-appointment/success?appointmentId=${appointment.$id}`,
+        );
       }
     } catch (error) {
       console.error(error);

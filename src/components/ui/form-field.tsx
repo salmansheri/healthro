@@ -25,8 +25,7 @@ import { Textarea } from "./textarea";
 import { Select, SelectContent, SelectTrigger, SelectValue } from "./select";
 import { Checkbox } from "./checkbox";
 import { Label } from "./label";
-import TimePicker from 'react-time-picker'; 
-
+import TimePicker from "react-time-picker";
 
 export enum FormFieldType {
   INPUT = "input",
@@ -98,8 +97,6 @@ const RenderInput: React.FC<RenderInputProps> = ({ field, props }) => {
     case FormFieldType.DATE_PICKER:
       return (
         <div className="flex w-full rounded-md border border-dark-500 bg-dark-40 ">
-
-      
           <Popover>
             <PopoverTrigger asChild>
               <FormControl>
@@ -181,13 +178,12 @@ const RenderInput: React.FC<RenderInputProps> = ({ field, props }) => {
         </FormControl>
       );
 
-      case FormFieldType.TIME_PICKER: 
+    case FormFieldType.TIME_PICKER:
       return (
         <div className="w-full">
           <Input type="time" />
-          
         </div>
-      )
+      );
 
     default:
       break;

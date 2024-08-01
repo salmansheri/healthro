@@ -5,13 +5,13 @@ interface SubmitButtonProps {
   isLoading: boolean;
   className?: string;
   children: React.ReactNode;
-  variant?: ButtonProps["variant"]; 
+  variant?: ButtonProps["variant"];
 }
 export const SubmitButton: React.FC<SubmitButtonProps> = ({
   isLoading,
   className,
   children,
-  variant, 
+  variant,
 }) => {
   return (
     <Button variant={variant} type="submit" disabled={isLoading}>

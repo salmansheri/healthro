@@ -2,7 +2,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { getAppointments } from "@/lib/action/appointment.action";
 import { cn } from "@/lib/utils";
 
-import { format, formatDate } from "date-fns";
+import { formatDate } from "date-fns";
 import { Copyright } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -55,35 +55,31 @@ export default async function SuccessPage({
         <section className="request-details">
           <p>Requested appointment Details</p>
           <div className="item-center flex gap-3">
-            
-            <p className="whitespace-nowrap">Dr. {appointment?.primaryPhysician}</p>
+            <p className="whitespace-nowrap">
+              Dr. {appointment?.primaryPhysician}
+            </p>
           </div>
           <div className="flex gap-2">
-            <p>
-               {
-                formatDate(new Date(appointment?.schedule), "yyyy-MM-dd")
-               }
-            </p>
-            <p>
-                {appointment?.time}
-            </p>
-
+            <p>{formatDate(new Date(appointment?.schedule), "yyyy-MM-dd")}</p>
+            <p>{appointment?.time}</p>
           </div>
         </section>
 
-        <Link className={cn(buttonVariants({
-            variant: "outline", 
-
-        }))} href={`/patients/${userId}/new-appointment`}>
-        New Appointment
+        <Link
+          className={cn(
+            buttonVariants({
+              variant: "outline",
+            }),
+          )}
+          href={`/patients/${userId}/new-appointment`}
+        >
+          New Appointment
         </Link>
-<div className="flex items-center justify-center text-sm text-rose-500">
-    <Copyright className="h-3" />
+        <div className="flex items-center justify-center text-sm text-rose-500">
+          <Copyright className="h-3" />
 
-        <p className="text-sm ">
-            {` copyright 2024`}
-        </p>
-</div>
+          <p className="text-sm ">{` copyright 2024`}</p>
+        </div>
       </div>
     </div>
   );

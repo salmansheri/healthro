@@ -72,7 +72,7 @@ export const PatientFormValidation = z.object({
 export const CreateAppointmentSchema = z.object({
   primaryPhysician: z.string().min(2, "Select at least one doctor"),
   schedule: z.coerce.date(),
-  time: z.string(), 
+  time: z.string(),
   reason: z
     .string()
     .min(2, "Reason must be at least 2 characters")
