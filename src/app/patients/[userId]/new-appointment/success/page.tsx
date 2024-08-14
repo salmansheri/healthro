@@ -38,13 +38,6 @@ export default async function SuccessPage({
         </Link>
 
         <section className="header mb-6 max-w-[600px] text-center">
-          {/* <Image 
-                src="https://giphy.com/embed/3tHOIp9e5taXdPNmE4"
-                alt="gif"
-                width={500}
-                height={500}
-            /> */}
-
           <h2>
             Your <span className="text-rose-500">Appointment request </span>has
             been successfully Submitted!

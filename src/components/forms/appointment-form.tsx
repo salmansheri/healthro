@@ -48,10 +48,6 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({
         status = "scheduled";
         break;
 
-      case "create":
-        status = "created";
-        break;
-
       case "cancel":
         status = "cancelled";
         break;
